@@ -1,25 +1,20 @@
 import { DirectiveView } from "presentation-decorator";
 import Dom from "presentation-dom";
 
-const createCard = (title) => {
+const createCard = (drawer, first, second, dataId, firstTitle, secondTitle, innerDrawer, listItems) => {
+  let list = ``;
+  for(let i in listItems) {
+    list = list + `<li>${listItems[i]}</li>`
+  }
   return `<ul>
-  <li class="recipe" data-id="356872">
-    <span class="calories">230</span>
-    <span class="name">${title}</span>
-    <ul class="ingredients">
-      <li><span class="amount">3 cups</span>broccoli florets</li>
-      <li><span class="amount">1 tbsp</span>butter</li>
-      <li><span class="amount">1 tbsp</span>olive oil</li>
-      <li><span class="amount">1 clove</span>minced garlic</li>
-      <li><span class="amount">1</span>chopped onion</li>
-      <li><span class="amount">1/2 tsp</span>chopped basil</li>
-      <li><span class="amount">1/2 tsp</span>chopped parsley</li>
-      <li><span class="amount">8</span>eggs</li>
-      <li><span class="amount">2</span>egg whites</li>
-      <li><span class="amount">1/2 cup</span>parmigiano reggiano cheese</li>
-    </ul>
-  </li>
-</ul>`
+    <li class=${drawer} data-id=${dataId}>
+      <span class=${first}>${secondTitle}</span>
+      <span class=${second}>${firstTitle}</span>
+      <ul class=${innerDrawer}>
+        ${list}
+      </ul>
+    </li>
+  </ul>`
 };
 
 class Drawer extends DirectiveView {
@@ -48,17 +43,61 @@ class Drawer extends DirectiveView {
       this._body = "";
     }
 
-    if(!options.title) {
-      this._title = "";
+    if(!options.drawer) {
+      this._drawer = "";
     } else {
-      this._title = options.title;
+      this._drawer = options.drawer;
+    }
+
+    if(!options.first) {
+      this._first = "";
+    } else {
+      this._first = options.first;
+    }
+
+    if(!options.second) {
+      this._second = "";
+    } else {
+      this._second = options.second
+    }
+
+    if(!options.dataId) {
+      this._dataId = "";
+    } else {
+      this._dataId = options.dataId;
+    }
+
+    if(!options.firstTitle) {
+      this._firstTitle = "";
+    } else {
+      this._firstTitle = options.firstTitle;
+    }
+
+    if(!options.secondTitle) {
+      this._secondTitle = "";
+    } else {
+      this._secondTitle = options.secondTitle;
+    }
+
+    if(!options.innerDrawer) {
+      this._innerDrawer = "";
+    } else {
+      this._innerDrawer = options.innerDrawer;
+    }
+
+    if(!options.listItems) {
+      this._listItems = "";
+    } else {
+      this._listItems = options.listItems;
     }
 
   };
 
   _template() {
-    return createCard(this._title);
+    return createCard(this._drawer, this._first, this._second, this._dataId, this._firstTitle, this._secondTitle, this._innerDrawer, this._listItems);
   };
+
+
 
   render() {
     this.injectTemplate(this._template());
