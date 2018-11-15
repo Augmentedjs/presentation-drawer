@@ -1,16 +1,16 @@
 import { DirectiveView } from "presentation-decorator";
 import Dom from "presentation-dom";
 
-const createCard = (drawer, first, second, dataId, firstTitle, secondTitle, innerDrawer, listItems) => {
+const createCard = (name, drawer, first, second, dataId, firstTitle, secondTitle, innerDrawer, listItems) => {
   let list = ``;
   for(let i in listItems) {
     list = list + `<li>${listItems[i]}</li>`
   }
   return `<ul>
-    <li class=${drawer} data-id=${dataId}>
-      <span class=${first}>${secondTitle}</span>
-      <span class=${second}>${firstTitle}</span>
-      <ul class=${innerDrawer}>
+    <li class="${drawer}" data-id="${dataId}" data-${name}="${drawer}" data-click="hide_ingredients">
+      <span class="${first}">${secondTitle}</span>
+      <span class="${second}" data-${name}="${second}" data-click="click_recipe">${firstTitle}</span>
+      <ul class="${innerDrawer}">
         ${list}
       </ul>
     </li>
@@ -94,10 +94,37 @@ class Drawer extends DirectiveView {
   };
 
   _template() {
-    return createCard(this._drawer, this._first, this._second, this._dataId, this._firstTitle, this._secondTitle, this._innerDrawer, this._listItems);
+    return createCard(this.name, this._drawer, this._first, this._second, this._dataId, this._firstTitle, this._secondTitle, this._innerDrawer, this._listItems);
   };
 
+  hide_ingredients(e) {
+    const ingredients = e.target.querySelector(".ingredients");
+    if(ingredients) {
+      ingredients.classList.toggle("visible");
+    }
+  };
 
+  click_recipe(e) {
+    const target = e.target.innerText.replace(/ /gi, "-");
+    const recipe = `${target}-${e.target.parentNode.dataset.id}`;
+    window.open(`https://www.yummly.com/recipe/${recipe}`);
+  };
+
+  click_ingredient(e) {
+    const ingredient = e.target.childNodes[e.target.childNodes.length-1].textContent;
+    window.open(`https://www.yummly.com/recipes?allowedIngredient=${ingredient}`);
+  };
+
+  // nodeObj() {
+  //   // const list_ingredient = element.querySelectorAll("ul.ingredients > li");
+  //   //
+  //   // list_ingredient.forEach((child) => {
+  //   //   child.addEventListener("click", this.click_ingredient);
+  //   // });
+  //
+  //   element.querySelector(".name").addEventListener("click", this.click_recipe);
+  //   element.addEventListener("click", this.hide_ingredients);
+  // };
 
   render() {
     this.injectTemplate(this._template());

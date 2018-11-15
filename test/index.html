@@ -5,62 +5,62 @@
     <link rel="stylesheet" type="text/css" href="../src/style.css">
     <script>
       /* add all JS here */
-      const recipe_by_cal = {};
-      const name_obj = {};
-      const name_arr = [];
-      const cal_arr = [];
+      // const recipe_by_cal = {};
+      // const name_obj = {};
+      // const name_arr = [];
+      // const cal_arr = [];
 
-      const hide_ingredients = (e) => {
-        const ingredients = e.target.querySelector(".ingredients");
-        if(ingredients) {
-          ingredients.classList.toggle("visible");
-        }
-      };
-
-      const click_recipe = (e) => {
-        const target = e.target.innerText.replace(/ /gi, "-");
-        const recipe = `${target}-${e.target.parentNode.dataset.id}`;
-        window.open(`https://www.yummly.com/recipe/${recipe}`);
-      };
-
-      const click_ingredient = (e) => {
-        const ingredient = e.target.childNodes[e.target.childNodes.length-1].textContent;
-        window.open(`https://www.yummly.com/recipes?allowedIngredient=${ingredient}`);
-      };
-
-      const nodeObj = () => {
-        const node_list = document.getElementsByClassName("recipe");
-        if(!node_list) {
-          return;
-        }
-
-        const node_array = Array.prototype.slice.call(node_list);
-
-        node_array.forEach((element) => {
-
-          const calories = element.querySelector(".calories").innerText;
-          const name = element.querySelector(".name").innerText;
-          const name_tag = element.querySelector(".name");
-          const list_ingredient = element.querySelectorAll("ul.ingredients > li");
-
-          list_ingredient.forEach((child) => {
-            child.addEventListener("click", click_ingredient);
-          });
-
-          element.querySelector(".name").addEventListener("click", click_recipe);
-          element.addEventListener("click", hide_ingredients);
-
-          recipe_by_cal[calories] = element;
-          name_obj[name] = calories;
-          name_arr.push(name);
-          cal_arr.push(calories);
-        });
-
-      };
-
-      window.addEventListener('DOMContentLoaded', () => {
-        const node_obj = nodeObj();
-      });
+      // const hide_ingredients = (e) => {
+      //   const ingredients = e.target.querySelector(".ingredients");
+      //   if(ingredients) {
+      //     ingredients.classList.toggle("visible");
+      //   }
+      // };
+      //
+      // const click_recipe = (e) => {
+      //   const target = e.target.innerText.replace(/ /gi, "-");
+      //   const recipe = `${target}-${e.target.parentNode.dataset.id}`;
+      //   window.open(`https://www.yummly.com/recipe/${recipe}`);
+      // };
+      //
+      // const click_ingredient = (e) => {
+      //   const ingredient = e.target.childNodes[e.target.childNodes.length-1].textContent;
+      //   window.open(`https://www.yummly.com/recipes?allowedIngredient=${ingredient}`);
+      // };
+      //
+      // const nodeObj = () => {
+      //   const node_list = document.getElementsByClassName("recipe");
+      //   if(!node_list) {
+      //     return;
+      //   }
+      //
+      //   const node_array = Array.prototype.slice.call(node_list);
+      //
+      //   node_array.forEach((element) => {
+      //
+      //     // const calories = element.querySelector(".calories").innerText;
+      //     // const name = element.querySelector(".name").innerText;
+      //     // const name_tag = element.querySelector(".name");
+      //     const list_ingredient = element.querySelectorAll("ul.ingredients > li");
+      //
+      //     list_ingredient.forEach((child) => {
+      //       child.addEventListener("click", click_ingredient);
+      //     });
+      //
+      //     element.querySelector(".name").addEventListener("click", click_recipe);
+      //     element.addEventListener("click", hide_ingredients);
+      //
+      //     // recipe_by_cal[calories] = element;
+      //     // name_obj[name] = calories;
+      //     // name_arr.push(name);
+      //     // cal_arr.push(calories);
+      //   });
+      //
+      // };
+      //
+      // window.addEventListener('DOMContentLoaded', () => {
+      //   const node_obj = nodeObj();
+      // });
 
     </script>
     <script defer src="../dist/presentation-drawer.js"></script>
