@@ -4,10 +4,8 @@ const options = {
   "firstTitle":"Broccoli Frittata",
   "dataId":"356872",
   "secondTitle":"230",
-  "drawer":"recipe",
-  "first":"calories",
-  "second":"name",
-  "innerDrawer":"ingredients",
+  "titleLink":"https://www.yummly.com/recipe/",
+  "ingredientLink":"https://www.yummly.com/recipes?allowedIngredient=",
   "listItems":[
     `<span class="amount">3 cups</span>broccoli florets`,
     `<span class="amount">1 tbsp</span>butter`,
@@ -19,7 +17,11 @@ const options = {
     `<span class="amount">8</span>eggs`,
     `<span class="amount">2</span>egg whites`,
     `<span class="amount">1/2 cup</span>parmigiano reggiano cheese`
-  ]
+  ],
+    "drawer":"recipe",
+    "first":"calories",
+    "second":"name",
+    "innerDrawer":"ingredients"
 };
 
 const view = new Drawer(options);
