@@ -1,142 +1,107 @@
 import { DirectiveView } from "presentation-decorator";
-import Dom from "presentation-dom";
 
-const createCard = (name, drawer, first, second, dataId, firstTitle, secondTitle, innerDrawer, listItems) => {
-  let list = ``;
-  for(let i in listItems) {
-    list = list + `<li>${listItems[i]}</li>`
-  }
-  return `<ul>
-    <li class="${drawer}" data-id="${dataId}" data-${name}="${drawer}" data-click="hide_ingredients">
-      <span class="${first}">${secondTitle}</span>
-      <span class="${second}" data-${name}="${second}" data-click="click_recipe">${firstTitle}</span>
-      <ul class="${innerDrawer}">
-        ${list}
-      </ul>
-    </li>
-  </ul>`
-};
+const INNER_DRAWER = "innerdrawer";
+const INNER_DRAWER_CLASS = `.${INNER_DRAWER}`;
 
-class Drawer extends DirectiveView {
+const CONTENT = "content";
+const CONTENT_CLASS = `.${CONTENT}`;
 
-  constructor(options){
+const MAIN_DRAWER_CLASS ="drawer";
+const VISIBLE_CLASS = "visible";
 
-    if(!options) {
-        options = {};
+/**
+ * A simple drawer with a sliding content drawer window.
+ * Currently only supports drawers to the right of the main box.
+ * <br/>
+ *
+ * Supported options:
+ * <ul>
+ * <li>content - The main content window</li>
+ * <li>drawer - The slide-out drawer content</li>
+ * </ul>
+ * @param {Object} options Options for the class
+ * @extends DecoratorView
+ */
+class DrawerView extends DirectiveView {
+  constructor(options) {
+    if (!options) {
+      options = {};
     }
 
-    if(!options.name) {
-      options.name = "drawer";
+    if (!options.content) {
+      options.content = "";
     }
 
-    if(!options.style) {
-      options.style = "drawer";
-    } else {
-      options.style = `drawer ${options.style}`;
+    if (!options.drawer) {
+      options.drawer = "";
     }
 
+    if (!options.name) {
+      options.name = "drawerview";
+    }
+
+    options.template = /*html*/`
+      <div class="${MAIN_DRAWER_CLASS}">
+        <div class="${CONTENT}" data-${options.name}="${CONTENT}" data-click="${CONTENT}">
+          ${options.content}
+        </div>
+        <div class="${INNER_DRAWER}" data-${options.name}="${INNER_DRAWER}" data-click="${INNER_DRAWER}">
+          ${options.drawer}
+        </div>
+      </div>
+    `;
     super(options);
-
-    if(options && options.body) {
-      this._body = options.body;
-    } else {
-      this._body = "";
-    }
-
-    if(!options.drawer) {
-      this._drawer = "";
-    } else {
-      this._drawer = options.drawer;
-    }
-
-    if(!options.first) {
-      this._first = "";
-    } else {
-      this._first = options.first;
-    }
-
-    if(!options.second) {
-      this._second = "";
-    } else {
-      this._second = options.second
-    }
-
-    if(!options.dataId) {
-      this._dataId = "";
-    } else {
-      this._dataId = options.dataId;
-    }
-
-    if(!options.firstTitle) {
-      this._firstTitle = "";
-    } else {
-      this._firstTitle = options.firstTitle;
-    }
-
-    if(!options.secondTitle) {
-      this._secondTitle = "";
-    } else {
-      this._secondTitle = options.secondTitle;
-    }
-
-    if(!options.innerDrawer) {
-      this._innerDrawer = "";
-    } else {
-      this._innerDrawer = options.innerDrawer;
-    }
-
-    if(!options.listItems) {
-      this._listItems = "";
-    } else {
-      this._listItems = options.listItems;
-    }
-
-    if(!options.titleLink) {
-      this._titleLink = "";
-    } else {
-      this._titleLink = options.titleLink;
-    }
-
-    if(!options.ingredientLink) {
-      this._ingredientLink = "";
-    } else {
-      this._ingredientLink = options.ingredientLink;
-    }
-
   };
 
-  _template() {
-    return createCard(this.name, this._drawer, this._first, this._second, this._dataId, this._firstTitle, this._secondTitle, this._innerDrawer, this._listItems);
-  };
-
-  hide_ingredients(e) {
-    const ingredients = e.target.querySelector(".ingredients");
-    if(ingredients) {
-      ingredients.classList.toggle("visible");
+  /**
+   * The callback method for clicking/tapping the main content box
+   * @param {Event} e The standard event
+   * @returns {DrawerView} Returns 'this'
+   */
+  content(e) {
+    let el;
+    if (this.el && typeof this.el === "string") {
+      el = document.querySelector(this.el);
+    } else if (this.el && typeof this.el === HTMLDivElement) {
+      el = this.el;
+    } else {
+      console.warn(`Drawer ${this.name} is not mounted`);
     }
+
+    if (el) {
+      const innerDrawer = el.querySelector(`.${INNER_DRAWER}`);
+      if(innerDrawer) {
+        innerDrawer.classList.toggle(VISIBLE_CLASS);
+      }
+    }
+    return this;
   };
 
-  click_recipe(e) {
-    const target = e.target.innerText.replace(/ /gi, "-");
-    const recipe = `${target}-${e.target.parentNode.dataset.id}`;
-    window.open(`${this._titleLink}${recipe}`);
+  /**
+   * The callback method for clicking/tapping the innerdrawer
+   * @param {Event} e The standard event
+   * @returns {DrawerView} Returns 'this'
+   */
+  innerdrawer(e) {
+    const el = document.querySelector(this.el);
+    if (el) {
+      const innerDrawer = el.querySelector(INNER_DRAWER_CLASS);
+      if(innerDrawer) {
+        innerDrawer.classList.toggle(VISIBLE_CLASS);
+      }
+    }
+    return this;
   };
 
-  click_ingredient(e) {
-    const ingredient = e.target.childNodes[e.target.childNodes.length-1].textContent;
-    window.open(`${this._ingredientLink}${ingredient}`);
+  /**
+   * Main render method
+   * @returns {DrawerView} Returns 'this'
+   */
+  async render() {
+    await super.render();
+    await this.delegateEvents();
+    return this;
   };
-
-  render() {
-    this.injectTemplate(this._template());
-    return super.render();
-  };
-
-  remove() {
-    this.removeTemplate(this.el, true);
-    return super.remove();
-  };
-
 };
 
-export default Drawer;
+export default DrawerView;

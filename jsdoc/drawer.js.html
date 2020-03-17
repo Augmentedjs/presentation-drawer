@@ -1,10 +1,10 @@
-<!-- start:readme.hbs -->
+<!-- start:source.tmpl.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>Augmented.js Next Core</title>
+		<title>drawer.js</title>
 		<link rel="icon" type="image/png" href="favicon.png"/>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -43,7 +43,7 @@
 			</style>
 		<script type="text/javascript">
 			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"ddd MMM Do YYYY","systemName":"Augmented.js Next Core","systemSummary":"Augmented.js Next Core - Simply Development.","systemLogo":"img/jensen-silo-circle-small.png","systemColor":"#607D8B","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"<a href='http://www.augmentedjs.com'>Augmented.js Homepage</a>","copyright":"","linenums":true,"collapseSymbols":false,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":true,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":false,"sort":"linenum, longname, version, since","search":true,"favicon":"favicon.png","stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false,"logoFile":"public/images/jensen-silo-circle-small.png","navType":"vertical","protocol":"html://"};
-			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_TOC_ENABLED = false;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
 </head>
@@ -87,22 +87,125 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">readme</span>
-				<h1><span class="name">Augmented.js Next Core</span></h1>
-				<div class="summary"><p>Augmented.js Next Core - Simply Development.</p></div>			</div>
+				<span class="kind">source</span>
+				<h1><span class="name">drawer.js</span></h1>
+			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
-			<div class="col-md-9 main-content">
-		<section class="readme-section">
-			<article><h1>presentation-drawer</h1>
-<p>The Augmented.js Next - Presentation Drawer Module.</p>
-<p>#API</p></article>
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">import { DirectiveView } from "presentation-decorator";
+
+const INNER_DRAWER = "innerdrawer";
+const INNER_DRAWER_CLASS = `.${INNER_DRAWER}`;
+
+const CONTENT = "content";
+const CONTENT_CLASS = `.${CONTENT}`;
+
+const MAIN_DRAWER_CLASS ="drawer";
+const VISIBLE_CLASS = "visible";
+
+/**
+ * A simple drawer with a sliding content drawer window.
+ * Currently only supports drawers to the right of the main box.
+ * &lt;br/>
+ *
+ * Supported options:
+ * &lt;ul>
+ * &lt;li>content - The main content window&lt;/li>
+ * &lt;li>drawer - The slide-out drawer content&lt;/li>
+ * &lt;/ul>
+ * @param {Object} options Options for the class
+ * @extends DecoratorView
+ */
+class DrawerView extends DirectiveView {
+  constructor(options) {
+    if (!options) {
+      options = {};
+    }
+
+    if (!options.content) {
+      options.content = "";
+    }
+
+    if (!options.drawer) {
+      options.drawer = "";
+    }
+
+    if (!options.name) {
+      options.name = "drawerview";
+    }
+
+    options.template = /*html*/`
+      &lt;div class="${MAIN_DRAWER_CLASS}">
+        &lt;div class="${CONTENT}" data-${options.name}="${CONTENT}" data-click="${CONTENT}">
+          ${options.content}
+        &lt;/div>
+        &lt;div class="${INNER_DRAWER}" data-${options.name}="${INNER_DRAWER}" data-click="${INNER_DRAWER}">
+          ${options.drawer}
+        &lt;/div>
+      &lt;/div>
+    `;
+    super(options);
+  };
+
+  /**
+   * The callback method for clicking/tapping the main content box
+   * @param {Event} e The standard event
+   * @returns {DrawerView} Returns 'this'
+   */
+  content(e) {
+    let el;
+    if (this.el &amp;&amp; typeof this.el === "string") {
+      el = document.querySelector(this.el);
+    } else if (this.el &amp;&amp; typeof this.el === HTMLDivElement) {
+      el = this.el;
+    } else {
+      console.warn(`Drawer ${this.name} is not mounted`);
+    }
+
+    if (el) {
+      const innerDrawer = el.querySelector(`.${INNER_DRAWER}`);
+      if(innerDrawer) {
+        innerDrawer.classList.toggle(VISIBLE_CLASS);
+      }
+    }
+    return this;
+  };
+
+  /**
+   * The callback method for clicking/tapping the innerdrawer
+   * @param {Event} e The standard event
+   * @returns {DrawerView} Returns 'this'
+   */
+  innerdrawer(e) {
+    const el = document.querySelector(this.el);
+    if (el) {
+      const innerDrawer = el.querySelector(INNER_DRAWER_CLASS);
+      if(innerDrawer) {
+        innerDrawer.classList.toggle(VISIBLE_CLASS);
+      }
+    }
+    return this;
+  };
+
+  /**
+   * Main render method
+   * @returns {DrawerView} Returns 'this'
+   */
+  async render() {
+    await super.render();
+    await this.delegateEvents();
+    return this;
+  };
+};
+
+export default DrawerView;
+</code></pre>
 		</section>
 			</div>
-				<div class="col-md-3 side-content">
-					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
-				</div>
 		</div>
 	</div>
 	<footer>
@@ -134,4 +237,4 @@
 	
 </body>
 </html>
-<!-- end:readme.hbs -->
+<!-- end:source.tmpl.hbs -->
