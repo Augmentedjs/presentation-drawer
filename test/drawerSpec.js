@@ -9,10 +9,11 @@ describe("Define Drawer component", () => {
   });
 
   it("creates a view in HTML", async () => {
-    const view = new Drawer.DrawerView({ "el": "#main"});
+    const view = new Drawer.DrawerView({ "el": "#main", "content": "<h1>Hello</h1>", "drawer": "<p>Is it me your are looking for?</p>"});
     await view.render();
     const el = await document.querySelector(view.el);
     const html = el.innerHTML;
+    console.debug(html);
     expect(html).to.not.be.undefined;
   });
 });
