@@ -18,7 +18,7 @@ The Augmented.js Next - Presentation Drawer Module.
 
 ## DrawerView
 
-**Extends DecoratorView**
+**Extends DirectiveView**
 
 A simple drawer with a sliding content drawer window.
 Currently only supports drawers to the right of the main box.

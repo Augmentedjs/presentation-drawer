@@ -20,7 +20,7 @@ const VISIBLE_CLASS = "visible";
  * <li>drawer - The slide-out drawer content</li>
  * </ul>
  * @param {Object} options Options for the class
- * @extends DecoratorView
+ * @extends DirectiveView
  */
 class DrawerView extends DirectiveView {
   constructor(options) {

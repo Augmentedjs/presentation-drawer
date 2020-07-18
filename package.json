@@ -1,6 +1,6 @@
 {
   "name": "presentation-drawer",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "The Augmented.js Next - Presentation Drawer Module.",
   "main": "dist/presentation-drawer.js",
   "scripts": {
@@ -53,6 +53,6 @@
   },
   "homepage": "http://www.augmentedjs.com",
   "dependencies": {
-    "presentation-decorator": "^3.2.0"
+    "presentation-decorator": "^3.2.1"
   }
 }
