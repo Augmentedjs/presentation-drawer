@@ -53,6 +53,6 @@
   },
   "homepage": "http://www.augmentedjs.com",
   "dependencies": {
-    "presentation-decorator": "^3.2.1"
+    "presentation-decorator": "^3.2.2"
   }
 }
